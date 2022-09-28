@@ -13,7 +13,6 @@ on:
         required: true
       tag:
         type: string
-        required: true
 
 jobs:
   build-image:
@@ -31,8 +30,20 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: docker build -t 'ghcr.io/UniversityRadioYork/${{ inputs.image }}:${{ inputs.tag }}' .
-      - run: docker push 'ghcr.io/UniversityRadioYork/${{ inputs.image }}:${{ inputs.tag }}' .
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ghcr.io/${{ inputs.image }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Trigger stacks update
         uses: benc-uk/workflow-dispatch@v1
@@ -40,4 +51,4 @@ jobs:
           workflow: Update Stack
           repo: UniversityRadioYork/stacks
           token: ${{ secrets.STACKS_TOKEN }}
-          inputs: '{ "stack": "${{ inputs.stack }}", "environment": "${{ inputs.environment }}", "image": "ghcr.io/UniversityRadioYork/${{ inputs.image }}", "tag": "${{ inputs.tag }}" }'
+          inputs: '{ "stack": "${{ inputs.stack }}", "environment": "${{ inputs.environment }}", "image": "ghcr.io/UniversityRadioYork/${{ inputs.image }}", "tag": "${{ steps.meta.outputs.tags }}" }'
