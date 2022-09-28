@@ -1,0 +1,3 @@
+hostname: ury.org.uk
+locations: [/myradio, /api]
+server: urysteve

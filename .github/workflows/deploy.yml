@@ -1,0 +1,12 @@
+on:
+  push:
+    branches: [main]
+    paths:
+      - "*/*.yml"
+
+jobs:
+  update-nginx-config:
+    name: Update Nginx Configs
+    runs-on: [self-hosted, stack-server]
+    steps:
+      - uses: actions/checkout@v3

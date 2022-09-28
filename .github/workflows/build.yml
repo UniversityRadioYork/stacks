@@ -1,0 +1,43 @@
+name: Build and Deploy Image
+
+on:
+  workflow_call:
+    inputs:
+      stack:
+        type: string
+      environment:
+        type: string
+        required: true
+      image:
+        type: string
+        required: true
+      tag:
+        type: string
+        required: true
+
+jobs:
+  build-image:
+    name: Build Image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to Docker registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - run: docker build -t 'ghcr.io/UniversityRadioYork/${{ inputs.image }}:${{ inputs.tag }}' .
+      - run: docker push 'ghcr.io/UniversityRadioYork/${{ inputs.image }}:${{ inputs.tag }}' .
+
+      - name: Trigger stacks update
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Update Stack
+          repo: UniversityRadioYork/stacks
+          token: ${{ secrets.STACKS_TOKEN }}
+          inputs: '{ "stack": "${{ inputs.stack }}", "environment": "${{ inputs.environment }}", "image": "ghcr.io/UniversityRadioYork/${{ inputs.image }}", "tag": "${{ inputs.tag }}" }'
