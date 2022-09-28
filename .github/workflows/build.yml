@@ -5,14 +5,16 @@ on:
     inputs:
       stack:
         type: string
+        required: true
       environment:
         type: string
         required: true
       image:
         type: string
-        required: true
+        default: ${{ github.repository }}
       tag:
         type: string
+        default: ${{ github.sha }}
 
 jobs:
   build-image:
@@ -35,7 +37,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ghcr.io/UniversityRadioYork/${{ inputs.image }}
+          images: ghcr.io/universityradioyork/${{ github.repository }}
+          tags: ${{ github.sha }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
@@ -51,4 +54,4 @@ jobs:
           workflow: Update Stack
           repo: UniversityRadioYork/stacks
           token: ${{ secrets.STACKS_TOKEN }}
-          inputs: '{ "stack": "${{ inputs.stack }}", "environment": "${{ inputs.environment }}", "image": "ghcr.io/UniversityRadioYork/${{ inputs.image }}", "tag": "${{ steps.meta.outputs.tags }}" }'
+          inputs: '{ "stack": "${{ inputs.stack }}", "environment": "${{ inputs.environment }}", "image": "ghcr.io/universityradioyork/${{ inputs.image }}", "tag": "${{ inputs.tag }}" }'
