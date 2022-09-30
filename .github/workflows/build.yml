@@ -53,5 +53,6 @@ jobs:
         with:
           workflow: Update Stack
           repo: UniversityRadioYork/stacks
+          ref: refs/heads/main
           token: ${{ secrets.STACKS_TOKEN }}
           inputs: '{ "stack": "${{ inputs.stack }}", "environment": "${{ inputs.environment }}", "image": "ghcr.io/universityradioyork/${{ inputs.image }}", "tag": "${{ inputs.tag }}" }'
