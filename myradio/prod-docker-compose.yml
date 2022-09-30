@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   web:
-    image: registry.ury.org.uk/myradio:2022-09-23-001
+    image: ghcr.io/universityradioyork/myradio:master
     expose: ['80']
     env_file: stack.env
     networks: [urynet]
