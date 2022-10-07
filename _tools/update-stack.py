@@ -7,6 +7,7 @@ if len(sys.argv) < 5:
     sys.exit(1)
 
 _, STACK, ENV, IMG, TAG = sys.argv
+IMG = IMG.lower()
 
 compose_file = f"{STACK}/{ENV}-docker-compose.yml"
 with open(compose_file, "r") as fd:
