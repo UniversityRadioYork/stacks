@@ -7,7 +7,7 @@ services:
     env_file: stack.env
     expose:
     - '80'
-    image: ghcr.io/universityradioyork/myradio:afcdb8c72bec71bd96de57408f67ef1aee712201
+    image: ghcr.io/universityradioyork/myradio:01066995e6cc6d388f7ef38dff5d9edba486b763
     networks:
     - urynet
 version: '3.8'
