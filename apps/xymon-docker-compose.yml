@@ -1,0 +1,16 @@
+services:
+  xymon:
+    image: deweysasser/xymon
+    ports:
+      - 3070:80
+      - 1984:1984
+    volumes:
+      - /opt/xymon/config:/usr/local/www/xymon/server/etc
+      - /opt/xymon/data:/var/lib/xymon
+    environment:
+      SSMTP_mailhub: ury.york.ac.uk
+      SSMTP_AuthUser: ury
+      SSMTP_AuthPass: ury
+      SSMTP_AuthMethod: LOGIN
+      SSMTP_UseTLS: "Yes"
+      TZ: Europe/London
