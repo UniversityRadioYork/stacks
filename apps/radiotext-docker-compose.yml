@@ -1,0 +1,7 @@
+---
+services:
+  radiotext:
+    image: "evergiven.ury.york.ac.uk:5000/radiotext"
+    volumes:
+      - /opt/radiotext/config.yml:/usr/src/app/config.yml
+    restart: on-failure
