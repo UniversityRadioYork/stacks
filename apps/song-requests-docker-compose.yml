@@ -1,0 +1,16 @@
+---
+services:
+  song-requests:
+    image: "evergiven.ury.york.ac.uk:5000/song-requests"
+    volumes:
+      - song-requests-data:/usr/src/app/data
+    ports:
+      - "3080:8080"
+    configs:
+      - source: myradio
+        target: /usr/src/app/.myradio.key
+configs:
+  myradio:
+    file: /opt/song-requests/.myradio.key
+volumes:
+  song-requests-data:
