@@ -1,0 +1,25 @@
+---
+services:
+  server:
+    image: "evergiven.ury.york.ac.uk:5000/loggerng-server"
+    ports:
+      - "3050:5000"
+    volumes:
+      - "loggerng-logs:/media/out"
+      - "/mnt/logs:/media/logs"
+    restart: "on-failure"
+    env_file: "/opt/loggerng-server/.env"
+  file_server:
+    image: nginx
+    ports:
+      - "3051:80"
+    volumes:
+      - "loggerng-logs:/usr/share/nginx/html"
+  mixclouder:
+    image: "evergiven.ury.york.ac.uk:5000/mixclouder"
+    volumes:
+      - "loggerng-logs:/mnt/logs"
+    restart: "on-failure"
+    env_file: "/opt/mixclouder/.env"
+volumes:
+  loggerng-logs:
